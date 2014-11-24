@@ -52,10 +52,5 @@ def sync_list_properties(store):
         mm_client = get_mailman_client(store.settings)
     except HTTPError:
         return # Can't refresh at this time
-    for list_name in store.get_list_names():
-        try:
-            mm_mlist = mm_client.get_list(list_name)
-        except (HTTPError, mailmanclient.MailmanConnectionError):
-            continue
-        if mm_mlist:
-            update_props(store, mm_mlist)
+    for mm_mlist in mm_client.lists:
+        update_props(store, mm_mlist)
